@@ -1,4 +1,4 @@
-
+import  {actionTypes } from '../actions/actionTypes';
 const  keepNotes = (state = [{
     id: 1,
     title: 'Title',
@@ -10,7 +10,7 @@ const  keepNotes = (state = [{
     importancy: 1
 }], action) => {
     switch (action.type) {
-        case 'ADD_KEEP_NOTE':
+        case actionTypes.ADD_KEEP_NOTE:
             return [
                 ...state,
                 {

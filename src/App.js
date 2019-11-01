@@ -99,10 +99,11 @@ class Calculator extends React.Component {
 }
 */
 const mapStateToProps = (state, ownProps) => {
+        const lastIndex = state.keepNotes.length - 1;
         return {
             id: 1,
             title: 'Title' + ownProps.title,
-            desc: state.desc || 'Desc',
+            desc: state.keepNotes[lastIndex].desc || 'Desc',
             tags: [{
                 id: 0,
                 name: 'My'
