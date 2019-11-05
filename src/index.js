@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers';
 import * as serviceWorker from './serviceWorker';
+import PageWrapper from "./containers/PageWrapper";
 const store = createStore(rootReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 ReactDOM.render(
     <Provider store={store}>
-    <App title={'Title'} />
+    <PageWrapper/>
     </Provider>,
     document.getElementById('root'));
 
