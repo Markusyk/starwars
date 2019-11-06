@@ -5,8 +5,6 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Content from "./Content";
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
