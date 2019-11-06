@@ -33,6 +33,10 @@ export default function Sidebar() {
             >
                 <div className={classes.toolbar} />
                 <List>
+                    <ListItem button>
+                        <ListItemText primary="General" />
+                    </ListItem>
+                    <Divider />
                     {['Travelling', 'Knowledge', 'Organizatinal', 'Work'].map((text, index) => (
                         <ListItem button key={text}>
                             <ListItemText primary={text} />
