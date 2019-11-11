@@ -36,8 +36,11 @@ export default function Sidebar() {
                     <ListItem button>
                         <ListItemText primary="General" />
                     </ListItem>
+                    <ListItem button>
+                        <ListItemText primary="Star Wars" />
+                    </ListItem>
                     <Divider />
-                    {['Travelling', 'Knowledge', 'Organizatinal', 'Work'].map((text, index) => (
+                    {['Travelling', 'Knowledge', 'Organizatinal', 'Work'].map((text) => (
                         <ListItem button key={text}>
                             <ListItemText primary={text} />
                         </ListItem>
