@@ -37,6 +37,15 @@ export default function ContentItem({title, date, description, tags}) {
     const handleTagClick = clickedItem => () => {
         setTagData(tags => [...tags, { ...clickedItem, id: clickedItem.id + id++ }]);
     };
+    const tagItemDomElements = tagItems.map((item) =>
+        <Chip
+            key={item.id}
+            label={item.name}
+            onClick={handleTagClick(item)}
+            onDelete={handleDeleteClick(item)}
+            className={classes.chip}
+        />
+    );
     return (
             <Grid item>
                 <Card className={classes.card}>
@@ -55,15 +64,7 @@ export default function ContentItem({title, date, description, tags}) {
                         </Typography>
                         { tagItems.length > 0 &&
                             <Paper className={classes.tags}>
-                                {tagItems.map((item) =>
-                                    <Chip
-                                        key={item.id}
-                                        label={item.name}
-                                        onClick={handleTagClick(item)}
-                                        onDelete={handleDeleteClick(item)}
-                                        className={classes.chip}
-                                    />
-                                )}
+                                {tagItemDomElements}
                             </Paper>
                         }
                     </CardContent>
