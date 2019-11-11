@@ -1,4 +1,4 @@
-import  {actionTypes } from '../actions/actionTypes';
+import  {actionTypes } from '../constants/actionTypes';
 const  keepNotes = (state = [{
     id: 1,
     title: 'Title',

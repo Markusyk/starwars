@@ -1,4 +1,4 @@
-import {actionTypes} from './actionTypes';
+import {actionTypes} from '../constants/actionTypes';
 
 let id = 0;
 export const addKeepNote = (payload) => {
