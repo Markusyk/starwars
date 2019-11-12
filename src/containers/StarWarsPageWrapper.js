@@ -3,11 +3,8 @@ import Header from "./Header";
 import Content from "./Content";
 import axios from "../http/star-wars-default-config";
 
-export default function StarWarsPageWrapper() {
+export default function StarWarsPageWrapper(props) {
 
-    useEffect(() => {
-        axios.get(`/people/62/`).then(console.log);
-    });
     return (
         <React.Fragment>
            <Content/>

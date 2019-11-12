@@ -20,9 +20,9 @@ const  keepNotes = (state = [{
                     tags: action.payload.tags ? action.payload.tags : [],
                     importancy: action.payload.importancy,
                 }
-            ]
+            ];
         default:
-            return state
+            return state;
     }
 };
 

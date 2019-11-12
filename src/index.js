@@ -19,6 +19,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = createStore(rootReducer,
     composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
+
 ReactDOM.render(
     <Provider store={store}>
         <Router>

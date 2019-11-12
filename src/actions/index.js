@@ -8,3 +8,23 @@ export const addKeepNote = (payload) => {
         payload,
     };
 };
+
+export const getPeople = (payload) => {
+  return  {
+      type: actionTypes.GET_PEOPLE,
+  }
+};
+
+export const getPeopleSuccess = (payload) =>{
+    return  {
+        type: actionTypes.GET_PEOPLE_SUCCESS,
+        payload,
+    }
+};
+
+export const getPeopleFail = (error) =>{
+    return  {
+        type: actionTypes.GET_PEOPLE_SUCCESS,
+        error,
+    }
+};
