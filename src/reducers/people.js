@@ -1,4 +1,5 @@
 import {actionTypes} from "../constants/actionTypes";
+import keepNotes from "./keepNotes";
 
 const people = (state = {
     all: [{
@@ -37,3 +38,4 @@ const people = (state = {
             return state;
     }
 };
+export default people;

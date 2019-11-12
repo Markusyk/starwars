@@ -5,16 +5,16 @@ import {getPeopleSuccess, getPeople as getPeopleAction, getPeopleFail} from "../
 
 function* getPeople() {
     try {
-        const response = yield axios.get('/people');
-        put( getPeopleSuccess(response.data) );
+        const response = yield axios.get('/people/');
+        yield put( getPeopleSuccess(response.data) );
     } catch(err) {
         console.err(err);
-        put( getPeopleFail(err) );
+        yield put( getPeopleFail(err) );
     }
 }
 
 function*  watchGetPeopleAction() {
-    yield takeEvery(getPeopleAction(), getPeople);
+    yield takeEvery(getPeopleAction().type, getPeople);
 }
 
 export default function* rootSaga() {

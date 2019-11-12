@@ -9,7 +9,7 @@ export const addKeepNote = (payload) => {
     };
 };
 
-export const getPeople = (payload) => {
+export const getPeople = () => {
   return  {
       type: actionTypes.GET_PEOPLE,
   }
