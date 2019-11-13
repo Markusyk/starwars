@@ -1,0 +1,6 @@
+export  const actionTypes = {
+    ADD_KEEP_NOTE: 'ADD_KEEP_NOTE',
+    GET_PEOPLE: 'GET_PEOPLE',
+    GET_PEOPLE_SUCCESS: 'GET_PEOPLE_SUCCESS',
+    GET_PEOPLE_FAIL: 'GET_PEOPLE_FAIL',
+};

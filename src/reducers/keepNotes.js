@@ -1,4 +1,4 @@
-import  {actionTypes } from '../actions/actionTypes';
+import  {actionTypes } from '../constants/actionTypes';
 const  keepNotes = (state = [{
     id: 1,
     title: 'Title',
@@ -20,9 +20,9 @@ const  keepNotes = (state = [{
                     tags: action.payload.tags ? action.payload.tags : [],
                     importancy: action.payload.importancy,
                 }
-            ]
+            ];
         default:
-            return state
+            return state;
     }
 };
 
