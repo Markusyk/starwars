@@ -8,6 +8,7 @@ import AddIcon from "@material-ui/core/SvgIcon/SvgIcon";
 import Fab from "@material-ui/core/Fab";
 import {getPeople} from "../actions";
 import { withRouter } from "react-router-dom"
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
@@ -15,9 +16,15 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
+    spinner: {
+        position: 'fixed',
+        bottom: '50%',
+        right: '50%',
+        transform: 'translate(-50%, -50%)',
+    },
     fab: {
         position: 'fixed',
-        bottom: theme.spacing(4),
+        bottom: theme.spacing(3),
         right: theme.spacing(6),
     },
 }));
@@ -32,6 +39,7 @@ function StarWarsPageWrapper(props) {
             <Content/>
             <div className={classes.content}>
                 <div className={classes.toolbar}/>
+                { props.loading && <CircularProgress className={classes.spinner} /> }
                 <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleClick}>
                     <AddIcon/>
                 </Fab>
@@ -41,9 +49,9 @@ function StarWarsPageWrapper(props) {
 }
 
 const mapStateToProps = (state /*, ownProps*/) => {
-    console.log(state);
     return {
-        people: state.people
+        people: state.people,
+        loading: state.isLoading
     };
 };
 

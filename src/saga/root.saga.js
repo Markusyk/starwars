@@ -8,7 +8,7 @@ function* getPeople() {
         const response = yield axios.get('/people/');
         yield put( getPeopleSuccess(response.data) );
     } catch(err) {
-        console.err(err);
+        console.log(err)
         yield put( getPeopleFail(err) );
     }
 }

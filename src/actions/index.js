@@ -24,7 +24,7 @@ export const getPeopleSuccess = (payload) =>{
 
 export const getPeopleFail = (error) =>{
     return  {
-        type: actionTypes.GET_PEOPLE_SUCCESS,
+        type: actionTypes.GET_PEOPLE_FAIL,
         error,
     }
 };

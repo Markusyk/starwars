@@ -1,6 +1,10 @@
 import {actionTypes} from "../constants/actionTypes";
 import keepNotes from "./keepNotes";
-
+import map from 'lodash/fp/map';
+import curry from 'lodash/fp/curry';
+import flow from 'lodash/fp/flow'
+import { reduceInSequence } from '../helpers/functional'
+import { mapUrlsToIds} from "./helper";
 const people = (state = {
     all: [{
         birth_year: "19 BBY",
@@ -20,18 +24,27 @@ const people = (state = {
         case actionTypes.GET_PEOPLE:
             return {
                 ...state,
-                loading: true,
             };
         case actionTypes.GET_PEOPLE_SUCCESS:
+            const data = action.payload;
+           /* const mapStarships =  map((starship)=> {
+                return starship[starship.length - 2];
+            }, person.starships);*/
+           const curriedmapUrlsToIds = curry(mapUrlsToIds);
+
             return {
                 ...state,
-                all: action.payload,
-                loading: false,
+                all: {
+                    ...data,
+                    results: reduceInSequence(
+                        curriedmapUrlsToIds('starships'),
+                        curriedmapUrlsToIds('films')
+                    )(data.results)
+                },
             };
         case actionTypes.GET_PEOPLE_FAIL:
             return {
                 ...state,
-                loading: false,
                 error: action.error,
             };
         default:
