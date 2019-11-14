@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Header() {
+export default function Header(props) {
     const classes = useStyles();
 
     return (
@@ -78,7 +78,7 @@ export default function Header() {
                         <MenuIcon />
                     </IconButton>
                     <Typography className={classes.title} variant="h6" noWrap>
-                        Logo of Keep App
+                        {props.title}
                     </Typography>
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
