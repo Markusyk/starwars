@@ -57,11 +57,12 @@ function tabAttributes(index) {
 
 function StarWarsPageWrapper(props) {
     const classes = useStyles();
+    const [value, setValue] = React.useState(0);
     const [sliderVal, setSliderVal] = React.useState([50, 140]);
     useEffect(() => {
         props.onGetPeople();
     }, []);
-    const [value, setValue] = React.useState(0);
+
     const onMassFilterChange = (event, value) => {
 
         setSliderVal(value);
@@ -130,7 +131,7 @@ const getVisiblePeople = (people, filterObj) => {
     }
 };
 const mapStateToProps = (state) => {
-    const  filters = get(state, 'people.filters.mass', [50, 140]);
+    const  filters = get(state, 'people.filters.mass', []);
     console.log('mapStateToProps', {state, filters, people: state.people.all.results});
     /*
     *
@@ -140,7 +141,7 @@ const mapStateToProps = (state) => {
         }, state.people.all.results)
     * */
     return {
-        people: getVisiblePeople(state.people.all.results, state.people.filters),
+        people: state.people.all.results,
         filters: state.people.filters.mass,
         loading: state.isLoading
     };

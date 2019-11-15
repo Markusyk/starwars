@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://prostoshubi.me/keepNotes",
   "dependencies": {
     "@babel/core": "7.6.0",
     "@material-ui/core": "^4.5.2",
