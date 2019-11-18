@@ -9,7 +9,7 @@ script:
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $Github
+  github_token: $GITHUB_TRAVIS
   local_dir: build
   on:
     branch: master
