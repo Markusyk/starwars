@@ -15,14 +15,17 @@ import StarWarsPageWrapper from "./containers/StarWarsPageWrapper";
 import {composeWithDevTools} from "redux-devtools-extension";
 import rootSaga from "./saga/root.saga";
 
-const sagaMiddleware = createSagaMiddleware();
 
+const sagaMiddleware = createSagaMiddleware();
+/*const storeEnhancer = process.env.NODE_ENV === 'development' ?
+    composeWithDevTools(applyMiddleware(sagaMiddleware))
+    : applyMiddleware(sagaMiddleware);*/
 const store = createStore(rootReducer,
 composeWithDevTools(applyMiddleware(sagaMiddleware))
 );
 
 sagaMiddleware.run(rootSaga);
-//sagaMiddleware.run(rootSaga);
+
 ReactDOM.render(
     <Provider store={store}>
         <Router>
