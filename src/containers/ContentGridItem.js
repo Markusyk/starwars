@@ -46,10 +46,10 @@ export default function ContentGridItem({title, date, content}) {
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                       Mass: {content.mass}
+                       Mass of Person: {content.mass}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Height: {content.height}
+                        Height of Person: {content.height}
                     </Typography>
 
                  </CardContent>
