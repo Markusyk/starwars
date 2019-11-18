@@ -1,9 +1,7 @@
 language: node_js
 node_js:
   - stable
-cache:
-  directories:
-    - node_modules
+cache: npm
 script:
   - npm run build
 deploy:
@@ -12,4 +10,4 @@ deploy:
   github_token: $GITHUB_TRAVIS
   local_dir: build
   on:
-    branch: master
+    branch: gh-pages
