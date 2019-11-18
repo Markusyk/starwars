@@ -1,10 +1,8 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Header from "./Header";
 import debounce from 'lodash/debounce';
 
-import filter from 'lodash/filter';
-import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/fp/filter';
 import { connect } from 'react-redux';
 import {makeStyles} from "@material-ui/core";
 
@@ -57,36 +55,37 @@ function tabAttributes(index) {
 
 function StarWarsPageWrapper(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-    const [sliderVal, setSliderVal] = React.useState([50, 140]);
+    const [tabValue, setValue] = useState(0);
+    const [sliderVal, setSliderVal] = useState([50, 140]);
+
     useEffect(() => {
-        props.onGetPeople();
-    }, []);
+      const getPeople =   props.onGetPeople;
+      getPeople();
+    }, [props.onGetPeople]);
 
     const onMassFilterChange = (event, value) => {
-
         setSliderVal(value);
         props.onMassFilterChange({mass: value})
     };
-    const debouncedonMassFilterChange = debounce(onMassFilterChange, 100);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     function valuetext(value) {
         return `${value} Mass`;
     }
+
     return (
         <div className={classes.root}>
             <Header title={'Star Wars'}/>
             <div className={classes.tab}>
                 <div className={classes.toolbar}/>
-                <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                <Tabs value={tabValue} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label="People" {...tabAttributes(0)} />
                     <Tab label="Starships" {...tabAttributes(1)} />
                     <Tab label="Planet" {...tabAttributes(2)} />
                 </Tabs>
 
-                <TabPanel value={value} index={0}>
+                <TabPanel value={tabValue} index={0}>
                     <Paper >
                         <Typography d="range-slider" gutterBottom>
                             Mass
@@ -104,12 +103,12 @@ function StarWarsPageWrapper(props) {
                             max={200}
                         />
                     </Paper>
+                        <ContentGrid filterChanged={sliderVal} data={props.people} />
+                </TabPanel>
+                <TabPanel value={tabValue} index={1}>
                     <ContentGrid data={props.people}/>
                 </TabPanel>
-                <TabPanel value={value} index={1}>
-                    <ContentGrid data={props.people}/>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
+                <TabPanel value={tabValue} index={2}>
                     <ContentGrid data={props.people}/>
                 </TabPanel>
             </div>
@@ -123,31 +122,14 @@ function StarWarsPageWrapper(props) {
     );
 }
 
-const getVisiblePeople = (people, filterObj) => {
-    if (isEmpty(filterObj)) {
-        return filter(v => v.visible,  people);
-    } else {
-        return filter(v => v.visible,  people);
-    }
-};
 const mapStateToProps = (state) => {
-    const  filters = get(state, 'people.filters.mass', []);
-    console.log('mapStateToProps', {state, filters, people: state.people.all.results});
-    /*
-    *
-    *  filter((item) => {
-            console.log('item and filters', {item, filters});
-          return +item.mass >=  filters[0] &&  + item.mass <= filters[1];
-        }, state.people.all.results)
-    * */
     return {
-        people: state.people.all.results,
-        filters: state.people.filters.mass,
+        people: filter(v => v.visible, state.people.all.results),
         loading: state.isLoading
     };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     const debouncedDispatch = debounce(dispatch, 300);
     return {
         onGetPeople: () => dispatch(getPeople()),

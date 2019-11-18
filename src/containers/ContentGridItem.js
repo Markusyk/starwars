@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {makeStyles} from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
@@ -9,7 +9,6 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Paper from "@material-ui/core/Paper";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from '@material-ui/core/Button';
 

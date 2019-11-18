@@ -1,11 +1,10 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {makeStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/fp/map';
-
 import ContentGridItem from "./ContentGridItem";
-import ContentItem from "./ContentItem";
+
 
 const useStyles = makeStyles(theme => ({
     content: {
@@ -17,11 +16,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function ContentGrid(props) {
     const classes = useStyles();
-    const contentItems = map((item, index) => {
+
+    console.log('propsChanged', props);
+    const contentItems = map((item) => {
         return (
             <ContentGridItem key={item.name} title={item.name} date={item.createdTime} content={item}/>
         );
-    }, props.data)
+    }, props.data);
     return (
         <main className={classes.content}>
             <div className={classes.toolbar}/>
