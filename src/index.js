@@ -24,14 +24,14 @@ const storeEnhancer = process.env.NODE_ENV === 'development' ?
 const store = createStore(rootReducer,
     storeEnhancer);
 
-
 sagaMiddleware.run(rootSaga);
 
+const basePath = process.env.NODE_ENV === 'development' ? '/' : '/starwars';
 ReactDOM.render(
     <Provider store={store}>
         <Router>
             <Switch>
-                <Route exact path="/starwars">
+                <Route exact path={basePath}>
                     <StarWarsPageWrapper/>
                 </Route>
             </Switch>

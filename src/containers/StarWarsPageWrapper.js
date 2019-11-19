@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import Header from "./Header";
 import debounce from 'lodash/debounce';
-
-import filter from 'lodash/fp/filter';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core";
 
-import {filterPeopleByMASS, getPeople} from "../actions";
-import { withRouter } from "react-router-dom"
+import {getPeople} from "../actions";
+import {Link, withRouter, useLocation} from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TabPanel from "./TabPanel";
 import Tabs from "@material-ui/core/Tabs";
@@ -16,6 +14,7 @@ import ContentGrid from "./ContentGrid";
 import Paper from "@material-ui/core/Paper";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.background.paper,
     },
     slider: {
-      width: 400
+        width: 400
     },
     toolbar: theme.mixins.toolbar,
     content: {
@@ -46,6 +45,7 @@ const useStyles = makeStyles(theme => ({
         right: theme.spacing(6),
     },
 }));
+
 function tabAttributes(index) {
     return {
         id: `simple-tab-${index}`,
@@ -53,23 +53,29 @@ function tabAttributes(index) {
     };
 }
 
+function useQueryParams() {
+    return new URLSearchParams(useLocation().search);
+}
+
 function StarWarsPageWrapper(props) {
     const classes = useStyles();
     const [tabValue, setValue] = useState(0);
-    const [sliderVal, setSliderVal] = useState([50, 140]);
-
+    const [massSliderValue, setMassSliderValue] = useState([50, 140]);
+    const [minMass, maxMass] = massSliderValue;
+    const query = useQueryParams();
     useEffect(() => {
-      const getPeople =   props.onGetPeople;
-      getPeople();
+        const getPeople = props.onGetPeople;
+        getPeople();
     }, [props.onGetPeople]);
 
     const onMassFilterChange = (event, value) => {
-        setSliderVal(value);
+        setMassSliderValue(value);
         props.onMassFilterChange({mass: value})
     };
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
     function valuetext(value) {
         return `${value} Mass`;
     }
@@ -86,24 +92,30 @@ function StarWarsPageWrapper(props) {
                 </Tabs>
 
                 <TabPanel value={tabValue} index={0}>
-                    <Paper >
+                    <Paper>
                         <Typography d="range-slider" gutterBottom>
-                            Mass
+                            Mass is {query.get('mass')}
                         </Typography>
                         <Slider
                             className={classes.slider}
-                            value={sliderVal}
+                            value={massSliderValue}
                             getAriaValueText={valuetext}
                             aria-labelledby="range-slider"
                             valueLabelDisplay="auto"
-                            onChange = {onMassFilterChange}
+                            onChange={onMassFilterChange}
                             step={10}
                             marks
                             min={30}
                             max={200}
                         />
                     </Paper>
-                        <ContentGrid filterChanged={sliderVal} data={props.people} />
+                    <Link to={`?mass=${minMass},${maxMass}`}>
+                        <Button variant="contained" color="primary" className={classes.button}>
+                            Apply Filters
+                        </Button>
+                    </Link>
+
+                    <ContentGrid filterChanged={massSliderValue} data={props.people}/>
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
                     <ContentGrid data={props.people}/>
@@ -116,7 +128,7 @@ function StarWarsPageWrapper(props) {
 
             <div className={classes.content}>
                 <div className={classes.toolbar}/>
-                { props.loading && <CircularProgress className={classes.spinner} /> }
+                {props.loading && <CircularProgress className={classes.spinner}/>}
             </div>
         </div>
     );
@@ -124,16 +136,16 @@ function StarWarsPageWrapper(props) {
 
 const mapStateToProps = (state) => {
     return {
-        people: filter(v => v.visible, state.people.all.results),
+        people: state.people.all.results,
         loading: state.isLoading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    const debouncedDispatch = debounce(dispatch, 300);
+    const log = debounce(console.log, 300);
     return {
         onGetPeople: () => dispatch(getPeople()),
-        onMassFilterChange: (filter)=> debouncedDispatch(filterPeopleByMASS(filter))
+        onMassFilterChange: (filter) => log('Filter')
     };
 };
 

@@ -1,14 +1,11 @@
 import {actionTypes} from "../constants/actionTypes";
 import map from 'lodash/fp/map';
-import get from 'lodash/get';
-import flow from 'lodash/flow';
 import { mapUrlToId} from "./helper";
 
 const people = (state = {
     all: {
         results: []
     },
-    filters: {}
 }, action) => {
     switch (action.type) {
         case actionTypes.GET_PEOPLE:
@@ -37,22 +34,6 @@ const people = (state = {
                 ...state,
                 error: action.error,
             };
-        case actionTypes.FILTER_PEOPLE_BY_MASS:
-            const [min, max] = get(action, 'payload.mass');
-            const mapped =  flow(
-            map((item) => {
-                    const isBetweenMinAndMax = Number(item.mass) >=  Number(min) &&  Number(item.mass) <= Number(max);
-                    return !isBetweenMinAndMax ? {...item, visible: false} : { ...item, visible: true};
-                  }),
-                )(state.all.results);
-            return {
-               ...state,
-                all: {
-                   ...state.all,
-                    results: mapped,
-                },
-                filters: get(action, 'payload'),
-             };
         default:
             return state;
     }
