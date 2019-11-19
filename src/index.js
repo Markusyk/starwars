@@ -21,7 +21,7 @@ const storeEnhancer = process.env.NODE_ENV === 'development' ?
     composeWithDevTools(applyMiddleware(sagaMiddleware))
     : applyMiddleware(sagaMiddleware);
 
-console.log(process.env);
+
 const store = createStore(rootReducer,
     storeEnhancer);
 
@@ -33,9 +33,6 @@ ReactDOM.render(
         <Router>
             <Switch>
                 <Route exact path="/">
-                    <PageWrapper/>
-                </Route>
-                <Route path="/star-wars">
                     <StarWarsPageWrapper/>
                 </Route>
             </Switch>
