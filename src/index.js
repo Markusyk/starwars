@@ -17,13 +17,14 @@ import rootSaga from "./saga/root.saga";
 
 
 const sagaMiddleware = createSagaMiddleware();
-/*const storeEnhancer = process.env.NODE_ENV === 'development' ?
+const storeEnhancer = process.env.NODE_ENV === 'development' ?
     composeWithDevTools(applyMiddleware(sagaMiddleware))
-    : applyMiddleware(sagaMiddleware);*/
+    : applyMiddleware(sagaMiddleware);
+
 console.log(process.env);
 const store = createStore(rootReducer,
-composeWithDevTools(applyMiddleware(sagaMiddleware))
-);
+    storeEnhancer);
+
 
 sagaMiddleware.run(rootSaga);
 
