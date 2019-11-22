@@ -9,6 +9,8 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
+import {sliderDefault} from "../constants/filter.constants";
+import {useQueryFilterParams} from "../hooks/filterQueryParams";
 
 
 const useStyles = makeStyles(theme => ({
@@ -44,17 +46,19 @@ const useStyles = makeStyles(theme => ({
 
 
 
-export default function FlterForm(props) {
+export default function FilterForm(props) {
     const classes = useStyles();
-    const defaultMassSliderValues = [0, 200];
-    const defaultHeightSliderValues = [0, 250];
-    const [massSliderValue, setMassSliderValue] = useState(defaultMassSliderValues);
-    const [heightSliderValue, setHeightSliderValue] = useState(defaultHeightSliderValues);
-    const [nameFilter, setNameFilterValue] = useState('');
+    const query = useQueryFilterParams();
+    const [appliedLowerMass, appliedBiggerMass] = query.mass;
+    const [appliedLowerHeight, appliedBiggerHeight] = query.height;
+    const appliedNameIncludes = query.nameIncludes;
+    const [massSliderValue, setMassSliderValue] = useState(query.mass);
+    const [heightSliderValue, setHeightSliderValue] = useState(query.height);
+    const [nameFilter, setNameFilterValue] = useState(query.nameIncludes);
     const [lowerMass, biggerMass] = massSliderValue;
     const [lowerHeight, biggerHeight] = heightSliderValue;
 
-    const debouncedSetName = debounce(setNameFilterValue);
+    const debouncedSetName = debounce(setNameFilterValue, 300);
     const onNameFilterChange = (event) => {
         debouncedSetName(event.target.value);
     };
@@ -113,8 +117,8 @@ export default function FlterForm(props) {
                         onChange={onMassFilterChange}
                         step={10}
                         marks
-                        min={0}
-                        max={200}
+                        min={sliderDefault.mass.lower}
+                        max={sliderDefault.mass.bigger}
                     />
                 </Box>
                 <Box className={classes.formInput}>
@@ -130,8 +134,8 @@ export default function FlterForm(props) {
                         onChange={onHeightFilterChange}
                         step={10}
                         marks
-                        min={0}
-                        max={250}
+                        min={sliderDefault.height.lower}
+                        max={sliderDefault.height.bigger}
                     />
                 </Box>
                 <Box className={classes.formInputText}>
@@ -146,7 +150,7 @@ export default function FlterForm(props) {
             </Paper>
             <Paper className={classes.formPaper}>
                 {createButton()}
-                <Button variant="contained" className={classes.button}>
+                <Button variant="contained"  className={classes.button}>
                     Reset to default
                 </Button>
             </Paper>
@@ -156,9 +160,9 @@ export default function FlterForm(props) {
                 {nameFilter === '' ? ' No Name Filters'  : ` Name filter is ${nameFilter}`}
             </Paper>
             <Paper className={classes.formPaper}>
-                Filters applied: Mass entered between {lowerMass} and {biggerMass} AND
-                Height is entered between {lowerHeight} and {biggerHeight} AND
-                {nameFilter === '' ? ' No Name Filters'  : ` Name filter is ${nameFilter}`}
+                Filters applied: Mass entered between {appliedLowerMass} and {appliedBiggerMass} AND
+                Height is entered between {appliedLowerHeight} and {appliedBiggerHeight} AND
+                {appliedNameIncludes === '' ? ' No Name Filters'  : ` Name filter is ${appliedNameIncludes}`}
             </Paper>
         </>
     );

@@ -6,3 +6,9 @@ export const reduceInSequence = function(/*funcs*/) {
         });
     };
 };
+
+export const  alt = function (func1, func2) {
+    return function (val) {
+        return func1(val) || func2(val);
+    }
+};

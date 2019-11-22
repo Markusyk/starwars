@@ -8,13 +8,14 @@ import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core";
 
 import {getPeople} from "../actions";
-import {withRouter, useLocation} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TabPanel from "./TabPanel";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import ContentGrid from "./ContentGrid";
 import FilterForm from "./FilterForm";
+import {useQueryFilterParams} from "../hooks/filterQueryParams";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,10 +50,6 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-function useQueryParams() {
-    return new URLSearchParams(useLocation().search);
-}
-
 function tabAttributes(index) {
     return {
         id: `simple-tab-${index}`,
@@ -63,13 +60,11 @@ function tabAttributes(index) {
 function StarWarsPageWrapper(props) {
     const classes = useStyles();
     const [tabValue, setTabValue] = useState(0);
-    const query = useQueryParams();
-    const [lowerMass, biggerMass] = query.has('mass') ?
-        query.get('mass').split(',') : [0, 200];
-    const [lowerHeight, biggerHeight] = query.has('height') ? query.get('height').split(',')
-        : [0, 250];
-
-    const currentFilterStringForName = query.has('nameIncludes') ? query.get('nameIncludes') : '';
+    const filterQueryParams = useQueryFilterParams();
+    const urlSearchParams = useQueryFilterParams().urlSearchParams;
+    const [lowerMass, biggerMass] = filterQueryParams.mass;
+    const [lowerHeight, biggerHeight] = filterQueryParams.height;
+    const currentFilterStringForName = filterQueryParams.nameIncludes;
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -79,13 +74,19 @@ function StarWarsPageWrapper(props) {
         return Number(current) >= Number(lowerLimit) &&
             Number(current) <= Number(biggerLimit);
     };
+    const flowableFilterByMass =  urlSearchParams.has('mass') ?
+        filter((person) => isBetweenNumbers(person.mass, lowerMass, biggerMass))
+        : identity;
+    const flowableFilterByHeight =  urlSearchParams.has('height') ?
+        filter((person) => isBetweenNumbers(person.height, lowerHeight, biggerHeight))
+        : identity;
+    const fllowableFillterByIncludeText = currentFilterStringForName  === '' ?  identity :
+        filter((person) => person.name.includes(currentFilterStringForName));
 
-    const filterByCurrentFilterStringForName = filter((person) => person.name.includes(currentFilterStringForName));
-
-    const filteredPeople = flow(
-        filter((person) => isBetweenNumbers(person.mass, lowerMass, biggerMass)),
-        filter((person) => isBetweenNumbers(person.height, lowerHeight, biggerHeight)),
-        currentFilterStringForName  === '' ?  identity : filterByCurrentFilterStringForName
+    const transformedPeople = flow(
+        flowableFilterByMass,
+        flowableFilterByHeight,
+         fllowableFillterByIncludeText
     )(props.people);
 
     useEffect(() => {
@@ -109,7 +110,7 @@ function StarWarsPageWrapper(props) {
 
                 <TabPanel value={tabValue} index={0}>
                     <FilterForm/>
-                    <ContentGrid data={filteredPeople}/>
+                    <ContentGrid data={transformedPeople}/>
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
                     <ContentGrid data={props.people}/>
