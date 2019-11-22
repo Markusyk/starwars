@@ -16,8 +16,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function ContentGrid(props) {
     const classes = useStyles();
-
-    console.log('propsChanged', props);
     const contentItems = map((item) => {
         return (
             <ContentGridItem key={item.name} title={item.name} date={item.createdTime} content={item}/>
