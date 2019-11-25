@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 
 import debounce from 'lodash/debounce';
 import {makeStyles} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
@@ -45,9 +45,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
 export default function FilterForm(props) {
     const classes = useStyles();
+    const history = useHistory();
     const query = useQueryFilterParams();
     const [appliedLowerMass, appliedBiggerMass] = query.mass;
     const [appliedLowerHeight, appliedBiggerHeight] = query.height;
@@ -57,7 +57,6 @@ export default function FilterForm(props) {
     const [nameFilter, setNameFilterValue] = useState(query.nameIncludes);
     const [lowerMass, biggerMass] = massSliderValue;
     const [lowerHeight, biggerHeight] = heightSliderValue;
-
     const debouncedSetName = debounce(setNameFilterValue, 300);
     const onNameFilterChange = (event) => {
         debouncedSetName(event.target.value);
@@ -70,7 +69,6 @@ export default function FilterForm(props) {
         setHeightSliderValue(value);
     };
 
-
     function massSliderLabel(value) {
         return `${value} Mass`;
     }
@@ -78,21 +76,28 @@ export default function FilterForm(props) {
     function heightSliderLabel(value) {
         return `${value} Height`;
     }
-
-    const createButton = () => {
-        const isFilterApplied = true;
+    const handleApplyFiltersBtn = () => {
         const massAndHeighQueryString = `?mass=${lowerMass},${biggerMass}&height=${lowerHeight},${biggerHeight}`;
         const queryParamString  = nameFilter === '' ? massAndHeighQueryString
             : `${massAndHeighQueryString}&nameIncludes=${nameFilter}`;
+        history.push(queryParamString);
+    };
+
+    const handleResetFiltersBtn = () => {
+        const queryParamString  = `?mass=${sliderDefault.mass.lower},${sliderDefault.mass.bigger}&height=${sliderDefault.height.lower},${sliderDefault.height.bigger}`;
+        history.push(queryParamString);
+    };
+    const createButton = () => {
+        // TODO: add logic when you need to disable button
+        const isFilterApplied = true;
         return (
             <React.Fragment>
                 {isFilterApplied ?
-                    (<Link to={location => ({...location, search: queryParamString })}>
-                        <Button variant="contained" color="primary"
+                    (
+                        <Button variant="contained" color="primary" onClick={handleApplyFiltersBtn}
                                 className={classes.button}>
                             Apply Filters
-                        </Button>
-                    </Link>) :
+                        </Button>) :
                     (<Button disabled={isFilterApplied} variant="contained" color="primary" className={classes.button}>
                             Apply Filters
                         </Button>
@@ -143,6 +148,7 @@ export default function FilterForm(props) {
                         id="standard-basic"
                         className={classes.formInputTextControl}
                         label="Name includes such letters"
+                        defaultValue={appliedNameIncludes}
                         margin="normal"
                         onChange={onNameFilterChange}
                     />
@@ -150,7 +156,7 @@ export default function FilterForm(props) {
             </Paper>
             <Paper className={classes.formPaper}>
                 {createButton()}
-                <Button variant="contained"  className={classes.button}>
+                <Button variant="contained" onClick={handleResetFiltersBtn}  className={classes.button}>
                     Reset to default
                 </Button>
             </Paper>

@@ -29,12 +29,8 @@ sagaMiddleware.run(rootSaga);
 const basePath = process.env.NODE_ENV === 'development' ? '/' : '/starwars';
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
-            <Switch>
-                <Route exact path={basePath}>
+        <Router basename={basePath}>
                     <StarWarsPageWrapper/>
-                </Route>
-            </Switch>
         </Router>
     </Provider>,
     document.getElementById('root'));

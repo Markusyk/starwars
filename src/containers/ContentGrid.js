@@ -18,13 +18,13 @@ export default function ContentGrid(props) {
     const classes = useStyles();
     const contentItems = map((item) => {
         return (
-            <ContentGridItem key={item.name} title={item.name} date={item.createdTime} content={item}/>
+            <ContentGridItem key={item.name} id={item.id} title={item.name} date={item.created.slice(0, 10)} content={item}/>
         );
     }, props.data);
     return (
         <main className={classes.content}>
             <div className={classes.toolbar}/>
-            {isEmpty(props.data) && <div>Loading content ...</div>}
+            {isEmpty(props.data) && <div>No data for Filters</div>}
             <Grid container>
                 {contentItems}
             </Grid>

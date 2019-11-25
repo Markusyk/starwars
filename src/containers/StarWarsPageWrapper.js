@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core";
 
 import {getPeople} from "../actions";
-import {withRouter} from "react-router-dom";
+import {BrowserRouter as Router, withRouter, Route, Switch, useRouteMatch} from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TabPanel from "./TabPanel";
 import Tabs from "@material-ui/core/Tabs";
@@ -16,6 +16,7 @@ import Tab from "@material-ui/core/Tab";
 import ContentGrid from "./ContentGrid";
 import FilterForm from "./FilterForm";
 import {useQueryFilterParams} from "../hooks/filterQueryParams";
+import DetailedGridPerson from "./DetailedPerson";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -65,7 +66,9 @@ function StarWarsPageWrapper(props) {
     const [lowerMass, biggerMass] = filterQueryParams.mass;
     const [lowerHeight, biggerHeight] = filterQueryParams.height;
     const currentFilterStringForName = filterQueryParams.nameIncludes;
-
+    const { path, url } = useRouteMatch();
+    console.log('StarWars', {path , url}
+    );
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
@@ -109,8 +112,17 @@ function StarWarsPageWrapper(props) {
                 </Tabs>
 
                 <TabPanel value={tabValue} index={0}>
-                    <FilterForm/>
-                    <ContentGrid data={transformedPeople}/>
+                    <Switch>
+                        <Route exact path={'/people'}>
+                            <FilterForm/>
+                           <ContentGrid data={transformedPeople}/>
+                        </Route>
+                        <Route path={`/people/:id`}>
+                            <DetailedGridPerson title={'Pupkin'}
+                                                date={'2019-20-03'}
+                                       content={{mass: 43, height: 45}} />
+                        </Route>
+                    </Switch>
                 </TabPanel>
                 <TabPanel value={tabValue} index={1}>
                     <ContentGrid data={props.people}/>

@@ -14,15 +14,16 @@ const people = (state = {
             };
         case actionTypes.GET_PEOPLE_SUCCESS:
             const data = action.payload;
-
+            let personId = 0;
             return {
                 ...state,
                 all: {
                     ...data,
-                    results: map((item) => {
+                    results: map((item, index) => {
+
                         return {
                             ...item,
-                            visible: true,
+                            id: ++personId,
                             starshipsIds: map(mapUrlToId, item.starships),
                             planetId: mapUrlToId(item.homeworld)
                         }

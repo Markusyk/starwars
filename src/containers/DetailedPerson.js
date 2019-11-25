@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(0.5),
     },
 }));
-export default function ContentGridItem({title, date, id, content}) {
+export default function DetailedGridPerson({title, date, id, content}) {
     const classes = useStyles();
     let { url } = useRouteMatch();
     return (
@@ -48,18 +48,18 @@ export default function ContentGridItem({title, date, id, content}) {
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                       Mass of Person: {content.mass}
+                        Mass of Person: {content.mass}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                         Height of Person: {content.height}
                     </Typography>
 
-                 </CardContent>
+                </CardContent>
                 <CardActions>
-                    <Link to={`${url}${id}`} >
-                    <Button variant="contained" color="primary" className={classes.button}>
-                        Go to Details
-                    </Button>
+                    <Link to={`${url}/${id}`} >
+                        <Button variant="contained" color="primary" className={classes.button}>
+                            Go to Details
+                        </Button>
                     </Link>
                 </CardActions>
             </Card>
