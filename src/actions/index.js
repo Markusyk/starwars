@@ -29,9 +29,4 @@ export const getPeopleFail = (error) =>{
     }
 };
 
-export const filterPeopleByMASS = (payload) =>{
-    return  {
-        type: actionTypes.FILTER_PEOPLE_BY_MASS,
-        payload,
-    }
-};
+

@@ -13,6 +13,7 @@ import createSagaMiddleware from 'redux-saga'
 import StarWarsPageWrapper from "./containers/StarWarsPageWrapper";
 import {composeWithDevTools} from "redux-devtools-extension";
 import rootSaga from "./saga/root.saga";
+import {basePathForRouting} from "./constants/routing.constants";
 
 
 const sagaMiddleware = createSagaMiddleware();
@@ -24,17 +25,12 @@ const storeEnhancer = process.env.NODE_ENV === 'development' ?
 const store = createStore(rootReducer,
     storeEnhancer);
 
-
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
-            <Switch>
-                <Route exact path="/starwars">
+        <Router basename={basePathForRouting}>
                     <StarWarsPageWrapper/>
-                </Route>
-            </Switch>
         </Router>
     </Provider>,
     document.getElementById('root'));
