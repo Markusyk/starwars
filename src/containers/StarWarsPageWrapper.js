@@ -8,7 +8,10 @@ import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core";
 
 import {getPeople} from "../actions";
-import {BrowserRouter as Router, withRouter, Route, Switch, useRouteMatch} from "react-router-dom";
+import {BrowserRouter as Router,
+    withRouter, Route, Switch, useRouteMatch,
+    Link,
+Redirect} from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TabPanel from "./TabPanel";
 import Tabs from "@material-ui/core/Tabs";
@@ -17,6 +20,7 @@ import ContentGrid from "./ContentGrid";
 import FilterForm from "./FilterForm";
 import {useQueryFilterParams} from "../hooks/filterQueryParams";
 import DetailedGridPerson from "./DetailedPerson";
+import {basePathForRouting} from "../constants/routing.constants";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -66,10 +70,11 @@ function StarWarsPageWrapper(props) {
     const [lowerMass, biggerMass] = filterQueryParams.mass;
     const [lowerHeight, biggerHeight] = filterQueryParams.height;
     const currentFilterStringForName = filterQueryParams.nameIncludes;
-    const { path, url } = useRouteMatch();
-    console.log('StarWars', {path , url}
+    const {path, url} = useRouteMatch();
+    console.log('StarWars', {path, url}
     );
     const handleTabChange = (event, newValue) => {
+        console.log('Tab change');
         setTabValue(newValue);
     };
 
@@ -77,26 +82,25 @@ function StarWarsPageWrapper(props) {
         return Number(current) >= Number(lowerLimit) &&
             Number(current) <= Number(biggerLimit);
     };
-    const flowableFilterByMass =  urlSearchParams.has('mass') ?
+    const flowableFilterByMass = urlSearchParams.has('mass') ?
         filter((person) => isBetweenNumbers(person.mass, lowerMass, biggerMass))
         : identity;
-    const flowableFilterByHeight =  urlSearchParams.has('height') ?
+    const flowableFilterByHeight = urlSearchParams.has('height') ?
         filter((person) => isBetweenNumbers(person.height, lowerHeight, biggerHeight))
         : identity;
-    const fllowableFillterByIncludeText = currentFilterStringForName  === '' ?  identity :
+    const fllowableFillterByIncludeText = currentFilterStringForName === '' ? identity :
         filter((person) => person.name.includes(currentFilterStringForName));
 
     const transformedPeople = flow(
         flowableFilterByMass,
         flowableFilterByHeight,
-         fllowableFillterByIncludeText
+        fllowableFillterByIncludeText
     )(props.people);
 
     useEffect(() => {
         const getPeople = props.onGetPeople;
         getPeople();
     }, [props.onGetPeople]);
-
     return (
         <div className={classes.root}>
             <Header title={'Star Wars'}/>
@@ -106,21 +110,22 @@ function StarWarsPageWrapper(props) {
 
                 </div>
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
-                    <Tab label="People" {...tabAttributes(0)} />
-                    <Tab label="Starships" {...tabAttributes(1)} />
-                    <Tab label="Planet" {...tabAttributes(2)} />
+                        <Tab label="People" {...tabAttributes(0)} />
+                        <Tab label="Starships" {...tabAttributes(1)} />
+                        <Tab label="Planet" {...tabAttributes(2)} />
                 </Tabs>
 
                 <TabPanel value={tabValue} index={0}>
                     <Switch>
+                        <Redirect exact from={'/'} to={'/people'}/>
                         <Route exact path={'/people'}>
                             <FilterForm/>
-                           <ContentGrid data={transformedPeople}/>
+                            <ContentGrid data={transformedPeople}/>
                         </Route>
                         <Route path={`/people/:id`}>
                             <DetailedGridPerson title={'Pupkin'}
                                                 date={'2019-20-03'}
-                                       content={{mass: 43, height: 45}} />
+                                                content={{mass: 43, height: 45}}/>
                         </Route>
                     </Switch>
                 </TabPanel>
@@ -133,9 +138,14 @@ function StarWarsPageWrapper(props) {
             </div>
 
 
-            <div className={classes.content}>
-                <div className={classes.toolbar}/>
-                {props.loading && <CircularProgress className={classes.spinner}/>}
+            < div
+                className={classes.content}>
+                < div
+                    className={classes.toolbar}
+                />
+                {
+                    props.loading && <CircularProgress className={classes.spinner}/>
+                }
             </div>
         </div>
     );

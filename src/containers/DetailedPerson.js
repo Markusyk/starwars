@@ -12,6 +12,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from '@material-ui/core/Button';
 import {Link, useRouteMatch} from "react-router-dom";
+import {basePathForImages } from "../constants/routing.constants";
 
 const useStyles = makeStyles(theme => ({
     media: {
@@ -43,7 +44,7 @@ export default function DetailedGridPerson({title, date, id, content}) {
                 />
                 <CardMedia
                     className={classes.media}
-                    image="/Yoda.webp"
+                    image={`${basePathForImages}Yoda.webp`}
                     title="Paella dish"
                 />
                 <CardContent>
