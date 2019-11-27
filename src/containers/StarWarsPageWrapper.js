@@ -10,7 +10,7 @@ import {makeStyles} from "@material-ui/core";
 import {getPeople} from "../actions";
 import {BrowserRouter as Router,
     withRouter, Route, Switch, useRouteMatch,
-    Link,
+    Link, useHistory,
 Redirect} from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TabPanel from "./TabPanel";
@@ -21,6 +21,7 @@ import FilterForm from "./FilterForm";
 import {useQueryFilterParams} from "../hooks/filterQueryParams";
 import DetailedGridPerson from "./DetailedPerson";
 import {basePathForRouting} from "../constants/routing.constants";
+import {getAllPeopleSelector} from "../selectors/people";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -71,11 +72,17 @@ function StarWarsPageWrapper(props) {
     const [lowerHeight, biggerHeight] = filterQueryParams.height;
     const currentFilterStringForName = filterQueryParams.nameIncludes;
     const {path, url} = useRouteMatch();
+    const history = useHistory();
+    const mappingOfURLandTabIndexes = [
+        '/people',
+        '/starships',
+        '/planets'
+    ];
     console.log('StarWars', {path, url}
     );
-    const handleTabChange = (event, newValue) => {
-        console.log('Tab change');
-        setTabValue(newValue);
+    const handleTabChange = (event, tabIndex) => {
+        setTabValue(tabIndex);
+        history.push(mappingOfURLandTabIndexes[tabIndex])
     };
 
     const isBetweenNumbers = (current, lowerLimit, biggerLimit) => {
@@ -89,7 +96,7 @@ function StarWarsPageWrapper(props) {
         filter((person) => isBetweenNumbers(person.height, lowerHeight, biggerHeight))
         : identity;
     const fllowableFillterByIncludeText = currentFilterStringForName === '' ? identity :
-        filter((person) => person.name.includes(currentFilterStringForName));
+        filter((person) => person.name.toLowerCase().includes(currentFilterStringForName.toLowerCase()));
 
     const transformedPeople = flow(
         flowableFilterByMass,
@@ -153,16 +160,14 @@ function StarWarsPageWrapper(props) {
 
 const mapStateToProps = (state) => {
     return {
-        people: state.people.all.results,
+        people: getAllPeopleSelector(state),
         loading: state.isLoading
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    const log = debounce(console.log, 300);
     return {
         onGetPeople: () => dispatch(getPeople()),
-        onMassFilterChange: (filter) => log('Filter')
     };
 };
 

@@ -85,6 +85,9 @@ export default function FilterForm(props) {
 
     const handleResetFiltersBtn = () => {
         const queryParamString  = `?mass=${sliderDefault.mass.lower},${sliderDefault.mass.bigger}&height=${sliderDefault.height.lower},${sliderDefault.height.bigger}`;
+        setMassSliderValue([sliderDefault.mass.lower, sliderDefault.mass.bigger]);
+        setHeightSliderValue([sliderDefault.height.lower, sliderDefault.height.bigger]);
+        setNameFilterValue('');
         history.push(queryParamString);
     };
     const createButton = () => {
