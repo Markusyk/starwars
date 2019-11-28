@@ -12,14 +12,23 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from '@material-ui/core/Button';
 import isEmpty from 'lodash/isEmpty';
-import {Link, useRouteMatch, useParams, withRouter} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {basePathForImages } from "../constants/routing.constants";
 import axios from "../http/star-wars-default-config";
-import {connect} from "react-redux";
-import {getAllPeopleSelector} from "../selectors/people";
-import {getPeople} from "../actions";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
+    toolbar: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+    spinner: {
+        position: 'fixed',
+        bottom: '50%',
+        right: '50%',
+        transform: 'translate(-50%, -50%)',
+    },
     media: {
         height: 220,
         width: 253,
@@ -100,6 +109,12 @@ const useStyles = makeStyles(theme => ({
                 </CardActions>
             </Card>
         </Grid> }
+         <div className={classes.content}>
+             <div className={classes.toolbar}/>
+             {
+                 isLoading   && <CircularProgress className={classes.spinner}/>
+             }
+         </div>
      </React.Fragment>
     );
 }

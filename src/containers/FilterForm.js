@@ -55,7 +55,6 @@ export default function FilterForm(props) {
     const [massSliderValue, setMassSliderValue] = useState(query.mass);
     const [heightSliderValue, setHeightSliderValue] = useState(query.height);
     const [nameFilter, setNameFilterValue] = useState(query.nameIncludes);
-    console.log('nameFilter', nameFilter);
     const [lowerMass, biggerMass] = massSliderValue;
     const [lowerHeight, biggerHeight] = heightSliderValue;
     const debouncedSetName = debounce(setNameFilterValue, 300);
