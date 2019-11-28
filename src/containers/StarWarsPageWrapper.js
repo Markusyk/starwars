@@ -78,8 +78,6 @@ function StarWarsPageWrapper(props) {
         '/starships',
         '/planets'
     ];
-    console.log('StarWars', {path, url}
-    );
     const handleTabChange = (event, tabIndex) => {
         setTabValue(tabIndex);
         history.push(mappingOfURLandTabIndexes[tabIndex])
@@ -130,9 +128,7 @@ function StarWarsPageWrapper(props) {
                             <ContentGrid data={transformedPeople}/>
                         </Route>
                         <Route path={`/people/:id`}>
-                            <DetailedGridPerson title={'Pupkin'}
-                                                date={'2019-20-03'}
-                                                content={{mass: 43, height: 45}}/>
+                            <DetailedGridPerson content={transformedPeople}/>
                         </Route>
                     </Switch>
                 </TabPanel>

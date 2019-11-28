@@ -55,6 +55,7 @@ export default function FilterForm(props) {
     const [massSliderValue, setMassSliderValue] = useState(query.mass);
     const [heightSliderValue, setHeightSliderValue] = useState(query.height);
     const [nameFilter, setNameFilterValue] = useState(query.nameIncludes);
+    console.log('nameFilter', nameFilter);
     const [lowerMass, biggerMass] = massSliderValue;
     const [lowerHeight, biggerHeight] = heightSliderValue;
     const debouncedSetName = debounce(setNameFilterValue, 300);
@@ -76,6 +77,7 @@ export default function FilterForm(props) {
     function heightSliderLabel(value) {
         return `${value} Height`;
     }
+    let nameFilterShouldBeCleanedFromForm = false;
     const handleApplyFiltersBtn = () => {
         const massAndHeighQueryString = `?mass=${lowerMass},${biggerMass}&height=${lowerHeight},${biggerHeight}`;
         const queryParamString  = nameFilter === '' ? massAndHeighQueryString
@@ -87,6 +89,8 @@ export default function FilterForm(props) {
         const queryParamString  = `?mass=${sliderDefault.mass.lower},${sliderDefault.mass.bigger}&height=${sliderDefault.height.lower},${sliderDefault.height.bigger}`;
         setMassSliderValue([sliderDefault.mass.lower, sliderDefault.mass.bigger]);
         setHeightSliderValue([sliderDefault.height.lower, sliderDefault.height.bigger]);
+        nameFilterShouldBeCleanedFromForm = true;
+        // TODO clean nameFilter correcty
         setNameFilterValue('');
         history.push(queryParamString);
     };
@@ -151,7 +155,7 @@ export default function FilterForm(props) {
                         id="standard-basic"
                         className={classes.formInputTextControl}
                         label="Name includes such letters"
-                        defaultValue={appliedNameIncludes}
+                        defaultValue={nameFilter}
                         margin="normal"
                         onChange={onNameFilterChange}
                     />
