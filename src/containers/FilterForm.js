@@ -1,6 +1,5 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 
-import debounce from 'lodash/debounce';
 import {makeStyles} from "@material-ui/core";
 import {useHistory} from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
@@ -54,12 +53,12 @@ export default function FilterForm(props) {
     const appliedNameIncludes = query.nameIncludes;
     const [massSliderValue, setMassSliderValue] = useState(query.mass);
     const [heightSliderValue, setHeightSliderValue] = useState(query.height);
+
     const [nameFilter, setNameFilterValue] = useState(query.nameIncludes);
     const [lowerMass, biggerMass] = massSliderValue;
     const [lowerHeight, biggerHeight] = heightSliderValue;
-    const debouncedSetName = debounce(setNameFilterValue, 300);
     const onNameFilterChange = (event) => {
-        debouncedSetName(event.target.value);
+        setNameFilterValue(event.target.value);
     };
     const onMassFilterChange = (event, value) => {
         setMassSliderValue(value);
@@ -76,19 +75,18 @@ export default function FilterForm(props) {
     function heightSliderLabel(value) {
         return `${value} Height`;
     }
-    let nameFilterShouldBeCleanedFromForm = false;
+
     const handleApplyFiltersBtn = () => {
         const massAndHeighQueryString = `?mass=${lowerMass},${biggerMass}&height=${lowerHeight},${biggerHeight}`;
-        const queryParamString  = nameFilter === '' ? massAndHeighQueryString
+        const queryParamString = nameFilter === '' ? massAndHeighQueryString
             : `${massAndHeighQueryString}&nameIncludes=${nameFilter}`;
         history.push(queryParamString);
     };
 
     const handleResetFiltersBtn = () => {
-        const queryParamString  = `?mass=${sliderDefault.mass.lower},${sliderDefault.mass.bigger}&height=${sliderDefault.height.lower},${sliderDefault.height.bigger}`;
+        const queryParamString = `?mass=${sliderDefault.mass.lower},${sliderDefault.mass.bigger}&height=${sliderDefault.height.lower},${sliderDefault.height.bigger}`;
         setMassSliderValue([sliderDefault.mass.lower, sliderDefault.mass.bigger]);
         setHeightSliderValue([sliderDefault.height.lower, sliderDefault.height.bigger]);
-        nameFilterShouldBeCleanedFromForm = true;
         // TODO clean nameFilter correcty
         setNameFilterValue('');
         history.push(queryParamString);
@@ -154,27 +152,26 @@ export default function FilterForm(props) {
                         id="standard-basic"
                         className={classes.formInputTextControl}
                         label="Name includes such letters"
-                        defaultValue={nameFilter}
+                        value={nameFilter}
                         margin="normal"
-                        onChange={onNameFilterChange}
-                    />
+                        onChange={onNameFilterChange}/>
                 </Box>
             </Paper>
             <Paper className={classes.formPaper}>
                 {createButton()}
-                <Button variant="contained" onClick={handleResetFiltersBtn}  className={classes.button}>
+                <Button variant="contained" onClick={handleResetFiltersBtn} className={classes.button}>
                     Reset to default
                 </Button>
             </Paper>
             <Paper className={classes.formPaper}>
                 Filtering entered: Mass entered between {lowerMass} and {biggerMass} AND
                 Height is entered between {lowerHeight} and {biggerHeight} AND
-                {nameFilter === '' ? ' No Name Filters'  : ` Name filter is ${nameFilter}`}
+                {nameFilter === '' ? ' No Name Filters' : ` Name filter is ${nameFilter}`}
             </Paper>
             <Paper className={classes.formPaper}>
                 Filters applied: Mass entered between {appliedLowerMass} and {appliedBiggerMass} AND
                 Height is entered between {appliedLowerHeight} and {appliedBiggerHeight} AND
-                {appliedNameIncludes === '' ? ' No Name Filters'  : ` Name filter is ${appliedNameIncludes}`}
+                {appliedNameIncludes === '' ? ' No Name Filters' : ` Name filter is ${appliedNameIncludes}`}
             </Paper>
         </>
     );

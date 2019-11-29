@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+    },
+    link: {
+        textDecoration: 'none',
     },
     spinner: {
         position: 'fixed',
@@ -85,24 +88,24 @@ const useStyles = makeStyles(theme => ({
                 />
                 <CardContent>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Mass of Person: {person.mass} Loading {isLoading}
+                        Mass of Person: {person.mass}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
                         Height of Person: {person.height}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Height of Person: {person.hair_color}
+                        Hair color of Person: {person.hair_color}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Height of Person: {person.skin_color}
+                        Skin color of Person: {person.skin_color}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" component="p">
-                        Height of Person: {person.eye_color}
+                        Eye color of Person: {person.eye_color}
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Link to={`/people`} >
-                        <Button variant="contained" color="primary" className={classes.button}>
+                    <Link className={classes.link} to={`/people`} >
+                        <Button  variant="contained" color="primary" className={classes.button}>
                             Go back
                         </Button>
                     </Link>

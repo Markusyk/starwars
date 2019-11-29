@@ -23,6 +23,9 @@ const useStyles = makeStyles(theme => ({
         width: 400,
         height: 425
     },
+    link: {
+        textDecoration: 'none',
+    },
     chip: {
         margin: theme.spacing(0.5),
     },
@@ -57,7 +60,7 @@ export default function ContentGridItem({title, date, id, content}) {
 
                  </CardContent>
                 <CardActions>
-                    <Link to={`${url}/${id}`} >
+                    <Link className={classes.link} to={`${url}/${id}`} >
                     <Button variant="contained" color="primary" className={classes.button}>
                         Go to Details
                     </Button>
